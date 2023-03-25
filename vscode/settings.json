@@ -1,0 +1,74 @@
+{
+  // --- general ---
+  "update.mode": "start",
+  "update.enableWindowsBackgroundUpdates": true,
+  "update.showReleaseNotes": false,
+  "telemetry.telemetryLevel": "off",
+  "window.title": "${dirty}${activeEditorLong}${separator}${rootName}${separator}${appName}",
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "files.associations": {
+    "*.tikz": "latex",
+    "*.f": "fortran"
+  },
+  "git.openRepositoryInParentFolders": "always",
+  // --- editor ---
+  "editor.unicodeHighlight.nonBasicASCII": false,
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "editor.detectIndentation": false,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true
+  },
+  "editor.renderWhitespace": "all",
+  "files.trimTrailingWhitespace": true,
+  // --- extensions ---
+  "json.format.keepLines": true,
+  "codesnap.shutterAction": "copy",
+  "redhat.telemetry.enabled": false,
+  "latex-workshop.latex.recipe.default": "latexmk (lualatex)",
+  "latex-workshop.view.pdf.viewer": "tab",
+  "latex-workshop.latex.autoBuild.cleanAndRetry.enabled": false,
+  "latex-workshop.latex.build.clearLog.everyRecipeStep.enabled": false,
+  "latex-workshop.latex.autoBuild.run": "onSave",
+  "powershell.codeFormatting.newLineAfterCloseBrace": false,
+  "evenBetterToml.formatter.allowedBlankLines": 1,
+  "evenBetterToml.formatter.alignEntries": true,
+  "evenBetterToml.formatter.alignComments": true,
+  "evenBetterToml.formatter.columnWidth": 80,
+  "evenBetterToml.formatter.indentEntries": true,
+  "evenBetterToml.formatter.indentTables": true,
+  "evenBetterToml.formatter.trailingNewline": true,
+  "rewrap.wholeComment": false,
+  "rewrap.wrappingColumn": 100,
+  // --- language specific ---
+  // black is too slow to run it on save
+  "[python]": {
+    "editor.formatOnSave": false
+  },
+  "python.formatting.provider": "black",
+  "isort.args": [ "--profile", "black" ],
+  // trailing whitespace has a purpose in md
+  "[markdown]": {
+    "files.trimTrailingWhitespace": false,
+    "editor.unicodeHighlight.ambiguousCharacters": false,
+    "editor.unicodeHighlight.invisibleCharacters": false,
+    "editor.wordWrap": "on",
+    // this just generates too many popups
+    "editor.quickSuggestions": {
+      "comments": "off",
+      "strings": "off",
+      "other": "off"
+    }
+  },
+  "[latex]": {
+    // this just generates too many popups
+    "editor.quickSuggestions": {
+      "comments": "off",
+      "strings": "off",
+      "other": "off",
+      "rewrap.wrappingColumn": 80,
+      "editor.wordWrap": "on"
+    }
+  }
+}
