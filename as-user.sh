@@ -57,6 +57,28 @@ install_rust() {
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 }
 
+install_vcpgk() {
+  git clone https://github.com/Microsoft/vcpkg.git $HOME/.vcpkg
+  cat >$HOME/.vcpkg <<EOF
+#!/bin/sh
+# vcpkg shell setup
+# affix colons on either side of $PATH to simplify matching
+case ":${PATH}:" in
+    *:"$HOME/.vcpkg":*)
+        ;;
+    *)
+        # Prepending path in case a system-installed rustc needs to be overridden
+        export PATH="$PATH:$HOME/.vcpkg"
+        ;;
+esac
+EOF
+  line='. $HOME/.vcpkg/env'
+  for f in $HOME/.bash_profile $HOME/.profile $HOME/.zshenv $HOME/.bashrc; do
+    sed -i '/line/d' $f
+    echo $line >>$f
+  done
+}
+
 main() {
   desktop_environment=$(echo $XDG_CURRENT_DESKTOP | tr '[:upper:]' '[:lower:]')
   here="$(dirname "$(realpath $0)")"
@@ -64,6 +86,7 @@ main() {
   texlive/texlive.sh
   oh_my_zsh
   install_rust
+  install_vcpkg
   cargo install paru
 }
 
