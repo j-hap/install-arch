@@ -17,9 +17,13 @@ packages=(
   # development
   man-db     # man pages
   noto-fonts # google tt fonts
-  discord    # (video)chatting
   git        # version control
   gdb        # debugger
+  clang      # at least for clang-format
+
+  # communication
+  discord        # (video)chatting
+  signal-desktop # encrypted instant messenger
 
   # utils
   lsusb             # usb device info
