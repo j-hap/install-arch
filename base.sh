@@ -368,7 +368,7 @@ install_graphics_driver() {
   echo "Looking for NVIDIA card" >&2
   # checks for nvidia graphics card and installs proprietary driver
   # adds driver to initrd for early loading
-  # disables nouveau driver
+  # disables nouveau driver, adds drivers for video encoding / decoding on hardware
   lspci -k 2>/dev/null | grep --after-context 2 --extended-regexp "(VGA|3D)" | grep --quiet --ignore-case nvidia >&2
   [ $? ] && echo success >&2
   if ! lspci -k 2>/dev/null | grep --after-context 2 --extended-regexp "(VGA|3D)" | grep --quiet --ignore-case nvidia; then
@@ -382,18 +382,23 @@ install_graphics_driver() {
     dkms            # framework for building kernel modules
     nvidia          # the driver package
     nvidia-settings # settings gui
-    libvdpau-va-gl  #
-    libva-utils     #
+    libva-utils     # support for hardware acceleration via VDPAU and NVDEC/NVENC (depending on model)
   )
 
-  # nvidia package blacklists nouveau by itself
+  # hardware acceleration translation layers:
+  # libva-vdpau-driver   # translation layer that offers VA-API and utilizes the VDPAU (old, not used)
+  # libvdpau-va-gl       # translation layer that offers VDPAU and utilizes VAAPI backend (not needed for proprietary driver)
+  # nvidia-vaapi-driver  # translation layer that offers VA-API and utilizes the NVDEC backend (designed for firefox, decoding only, see https://github.com/elFarto/nvidia-vaapi-driver)
+
+  # nvidia package blacklists nouveau by itself, so we don't need to
   arch-chroot "$SYSROOT" pacman -S --noconfirm --needed ${packages[@]}
-  install_aur https://aur.archlinux.org/libva-nvidia-driver.git # for hardware acceleration (and for zoom to work)
+  install_aur https://aur.archlinux.org/libva-nvidia-driver.git # hardware acceleration (see above)
 
   # removes kms (kernel mode setting) hook from mkinitcpio
   mkinitcpio_hooks=("${mkinitcpio_hooks[@]/kms/}")
 
-  #enable DRM (Direct Rendering Manager) kernel mode setting
+  # enables DRM (Direct Rendering Manager) kernel mode setting, both _ and - work in the module name, see
+  # https://github.com/elFarto/nvidia-vaapi-driver/issues/198
   kernel_cmdline+=(
     nvidia_drm.modeset=1
   )
@@ -441,6 +446,7 @@ done
 /usr/share/libalpm/scripts/kernel-install add
 EOF
   chmod u+x "${SYSROOT}/usr/share/libalpm/scripts/nvidia-install"
+
 }
 
 main() {
