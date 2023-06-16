@@ -97,7 +97,7 @@ main() {
   IFS=$'\n'
   for user in $(cat /etc/passwd | grep home | cut -d ":" -f 1); do
     echo "Enabling user services for $user" >&2
-    arch-chroot su - $user -c "systemctl --user enable ${user_services[@]}"
+    arch-chroot "${SYSROOT}" su - $user -c "systemctl --user enable ${user_services[@]}"
   done
   unset IFS
   diable_pc_speaker
