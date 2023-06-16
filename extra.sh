@@ -87,6 +87,42 @@ SUBSYSTEM=="block", ENV{ID_FS_TYPE}=="ntfs", ENV{ID_FS_TYPE}="ntfs3" , ENV{UDISK
 EOF
 }
 
+hardware_decoding_support() {
+  pacman --query --quiet libva-nvidia-driver &>/dev/null
+  has_vaapi_driver=$?
+  pacman --query --quiet firefox &>/dev/null
+  has_firefox=$?
+  if [ $has_vaapi_driver ] && [ $has_firefox ]; then
+    # firefox and libva-nvidia-driver installed
+    for user in $(cat /etc/passwd | grep home | cut -d ":" -f 1); do
+      # adds the necessary configs to each users preferences
+      if [ ! -f "${SYSROOT}/home/$user/.mozilla/firefox/profiles.ini" ]; then
+        arch-chroot "${SYSROOT}" su - $user -c "firefox -CreateProfile default-release"
+      fi
+      for profile in $(grep 'Path=' "${SYSROOT}/home/$user/.mozilla/firefox/profiles.ini" | cut -d "=" -f 2); do
+        preffile="${SYSROOT}/home/$user/.mozilla/firefox/${profile}/user.js"
+        if [ -f "${preffile}" ]; then
+          sed -i '/user_pref("media.ffmpeg.vaapi.enabled"/d' "${preffile}"
+          sed -i '/user_pref("media.rdd-ffmpeg.enabled"/d' "${preffile}"
+          sed -i '/user_pref("media.av1.enabled"/d' "${preffile}"           # only very new nvidia cards support this
+          sed -i '/user_pref("widget.dmabuf.force-enabled"/d' "${preffile}" # nvidia driver >500
+        fi
+        cat >>"${preffile}" <<EOF
+user_pref("media.ffmpeg.vaapi.enabled", true);
+user_pref("media.rdd-ffmpeg.enabled", true);
+user_pref("media.av1.enabled", false);
+user_pref("widget.dmabuf.force-enabled", true);
+EOF
+      done
+    done
+  fi
+  cat >"${SYSROOT}/etc/environment" <<EOF
+MOZ_DISABLE_RDD_SANDBOX=1
+EGL_PLATFORM=$XDG_SESSION_TYPE
+LIBVA_DRIVER_NAME=nvidia
+EOF
+}
+
 main() {
   echo "Installing packages..." >&2
   arch-chroot "${SYSROOT}" pacman -Syu --needed --noconfirm "${packages[@]}"
@@ -102,6 +138,7 @@ main() {
   unset IFS
   diable_pc_speaker
   automount_as_ntfs3
+  hardware_decoding_support
 }
 
 if [[ ! $ZSH_EVAL_CONTEXT =~ ':file$' ]]; then
