@@ -364,18 +364,7 @@ setup_initrd_generator() {
   echo "${kernel_cmdline[*]}" >"$SYSROOT/etc/kernel/cmdline"
 }
 
-install_graphics_driver() {
-  echo "Looking for NVIDIA card" >&2
-  # checks for nvidia graphics card and installs proprietary driver
-  # adds driver to initrd for early loading
-  # disables nouveau driver, adds drivers for video encoding / decoding on hardware
-  lspci -k 2>/dev/null | grep --after-context 2 --extended-regexp "(VGA|3D)" | grep --quiet --ignore-case nvidia >&2
-  [ $? ] && echo success >&2
-  if ! lspci -k 2>/dev/null | grep --after-context 2 --extended-regexp "(VGA|3D)" | grep --quiet --ignore-case nvidia; then
-    # no nvidia card
-    echo "No NVIDIA card found" >&2
-    return
-  fi
+install_nvidia_driver() {
   echo "Found NVIDIA card, installing driver" >&2
   packages=(
     linux-headers   # needed to build the nvidia kernel module
@@ -384,7 +373,6 @@ install_graphics_driver() {
     nvidia-settings # settings gui
     libva-utils     # support for hardware acceleration via VDPAU and NVDEC/NVENC (depending on model)
   )
-
   # hardware acceleration translation layers:
   # libva-vdpau-driver   # translation layer that offers VA-API and utilizes the VDPAU (old, not used)
   # libvdpau-va-gl       # translation layer that offers VDPAU and utilizes VAAPI backend (not needed for proprietary driver)
@@ -401,6 +389,10 @@ install_graphics_driver() {
   # https://github.com/elFarto/nvidia-vaapi-driver/issues/198
   kernel_cmdline+=(
     nvidia_drm.modeset=1
+  )
+
+  environment_entries=(
+    NVD_BACKEND=direct # needed until https://github.com/elFarto/nvidia-vaapi-driver/issues/126 is resolved
   )
 
   # adds driver modules mkinitcpio so they are available in the initrd and
@@ -446,6 +438,24 @@ done
 /usr/share/libalpm/scripts/kernel-install add
 EOF
   chmod u+x "${SYSROOT}/usr/share/libalpm/scripts/nvidia-install"
+}
+
+install_amd_driver() {
+  echo "Found AMD card, installing packages" >&2
+  packages=(
+    mesa
+  )
+}
+
+install_graphics_driver() {
+  echo "Looking for NVIDIA card..." >&2
+  # checks for nvidia graphics card and installs proprietary driver
+  # adds driver to initrd for early loading
+  # disables nouveau driver, adds drivers for video encoding / decoding on hardware
+  lspci -k 2>/dev/null | grep --after-context 2 --extended-regexp "(VGA|3D)" | grep --quiet --ignore-case nvidia && install_nvidia_driver
+
+  echo "Looking for AMD card..." >&2
+  lspci -k 2>/dev/null | grep --after-context 2 --extended-regexp "(VGA|3D)" | grep --quiet "AMD\|ATI\|Radeon" && install_amd_driver
 
 }
 
