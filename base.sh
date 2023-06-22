@@ -444,7 +444,10 @@ install_amd_driver() {
   echo "Found AMD card, installing packages" >&2
   packages=(
     mesa
+    libva-mesa-driver # hardware video acceleration for VA-API
+    mesa-vdpau        # hardware video acceleration for VDPAU api
   )
+  arch-chroot "$SYSROOT" pacman -S --noconfirm --needed ${packages[@]}
 }
 
 install_graphics_driver() {
