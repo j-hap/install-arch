@@ -1,7 +1,10 @@
 #! /bin/zsh
 
 oh_my_zsh() {
-  # oh-my-zsh
+  if [ -e $HOME/.oh-my-zsh ]; then
+    omz update
+    return
+  fi
   sh -c "$(curl --fail --silent --show-error --location https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   sed -i 's/^ZSH_THEME=.*$/ZSH_THEME=murilasso/' $HOME/.zshrc
 }
