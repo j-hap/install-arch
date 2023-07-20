@@ -7,6 +7,7 @@ oh_my_zsh() {
   fi
   sh -c "$(curl --fail --silent --show-error --location https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   sed -i 's/^ZSH_THEME=.*$/ZSH_THEME=murilasso/' $HOME/.zshrc
+  exit
 }
 
 get_plugin_id() {
