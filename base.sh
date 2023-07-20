@@ -24,7 +24,7 @@ subvolumes=(
   @home       # user home
   @opt        # third party software
   @root       # root user home
-  @svr        # for web servers
+  @srv        # for web servers
   @tmp        # temporary files
   @usr_local  # manually installed programs
   @var        # logs, temp files
