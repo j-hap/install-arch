@@ -52,6 +52,8 @@ packages=(
 
   # browser
   firefox
+  # mail
+  thunderbird
 )
 
 # should be added to autostart automatically
