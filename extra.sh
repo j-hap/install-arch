@@ -11,7 +11,7 @@ packages=(
   xfce4-screenshooter      # screenshot util
   xfce4-whiskermenu-plugin # alternative application menu
   xfce4-pulseaudio-plugin  # adjust volume from xfce panel
-  networks-manager-applet  # network management in panel
+  network-manager-applet   # network management in panel
   gvfs                     # for automatic management of removable devices
 
   # development
@@ -26,7 +26,7 @@ packages=(
   signal-desktop # encrypted instant messenger
 
   # utils
-  lsusb             # usb device info
+  usbutils          # usb device info
   wget              # command line file download
   neofetch          # flexing
   rsync             # sync util
