@@ -64,7 +64,7 @@ install_rust() {
 
 install_vcpgk() {
   git clone https://github.com/Microsoft/vcpkg.git $HOME/.vcpkg
-  cat >$HOME/.vcpkg <<EOF
+  cat >$HOME/.vcpkg/env <<EOF
 #!/bin/sh
 # vcpkg shell setup
 # affix colons on either side of $PATH to simplify matching
@@ -79,7 +79,7 @@ esac
 EOF
   line='. $HOME/.vcpkg/env'
   for f in $HOME/.bash_profile $HOME/.profile $HOME/.zshenv $HOME/.bashrc; do
-    sed -i '/line/d' $f
+    sed -i "/$line/d" $f
     echo $line >>$f
   done
 }
