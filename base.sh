@@ -542,7 +542,7 @@ main() {
 
   if $FORCE || [ "$(blkid --output value --match-tag TYPE $boot_partition)" != "vfat" ]; then
     echo "Formatting $boot_partition as fat32"
-    mkfs.fat -F 32 -n "$BOOT_LABEL" "$boot_partition"
+    mkfs.fat -F 32 -n "${BOOT_LABEL:0:11}" "$boot_partition"
   else
     echo "$boot_partition is already formatted as vfat"
   fi
@@ -550,7 +550,7 @@ main() {
   # blkid exits with nonzero if there is no file system
   if $FORCE || [ "$(blkid --output value --match-tag TYPE $root_partition)" != "btrfs" ]; then
     echo "Formatting $root_partition as btrfs"
-    mkfs.btrfs --label "$ROOT_LABEL" "$root_partition"
+    mkfs.btrfs --force --label "$ROOT_LABEL" "$root_partition"
   else
     echo "$root_partition is already formatted as btrfs"
   fi
