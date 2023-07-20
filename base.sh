@@ -4,12 +4,12 @@
 # goes wrong in the script and you don´t want to start from scratch
 
 SYSROOT="/mnt"
-BOOT_LABEL="BOOT"
-ROOT_LABEL="linux"
+BOOT_LABEL_PREFIX="BOOT"
+ROOT_LABEL_PREFIX="linux"
 # when systemd is running in the initrd, the / partition may be encrypted in
 # LUKS format. In this case, a device mapper device is set up under the name
 # /dev/mapper/root, so this name should probably be always 'root'
-MAPPER_NAME="root"
+MAPPER_NAME_PREFIX="root"
 
 #The subvolumes are inspired by
 # https://en.opensuse.org/SDB:BTRFS
@@ -465,6 +465,12 @@ install_graphics_driver() {
 main() {
   get_online
   device=$(select_device)
+
+  serial=$(udevadm info --query=property --property=ID_SERIAL_SHORT --value --name=$device)
+  BOOT_LABEL="${BOOT_LABEL_PREFIX}_${serial}"
+  ROOT_LABEL="${ROOT_LABEL_PREFIX}_${serial}"
+  MAPPER_NAME="${MAPPER_NAME_PREFIX}_${serial}"
+
   unmount_all
 
   if $FORCE ||
