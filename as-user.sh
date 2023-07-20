@@ -58,6 +58,7 @@ app_searcher_with_super_l() {
 
 install_rust() {
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+  source "$HOME/.cargo/env"
 }
 
 install_vcpgk() {
