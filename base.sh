@@ -598,10 +598,6 @@ main() {
   # mounts boot (must be after root!)
   mount --mkdir $boot_partition "$SYSROOT/boot"
 
-  # also valid:
-  # root_uuid=$(blkid --output value --match-tag UUID $root_partition)
-  # root_uuid=$(lsblk --noheading --output UUID --nodeps $root_partition)
-
   install_base
   install_graphics_driver
 
