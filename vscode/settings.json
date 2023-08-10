@@ -44,10 +44,12 @@
   // --- language specific ---
   // black is too slow to run it on save
   "[python]": {
-    "editor.formatOnSave": false
+    "editor.formatOnSave": false,
+    "editor.tabSize": 4,
   },
   "python.formatting.provider": "black",
   "isort.args": [ "--profile", "black" ],
+  "jupyter.debugJustMyCode": false,
   // trailing whitespace has a purpose in md
   "[markdown]": {
     "files.trimTrailingWhitespace": false,
@@ -70,5 +72,14 @@
       "rewrap.wrappingColumn": 80,
       "editor.wordWrap": "on"
     }
-  }
+  },
+  "workbench.editorAssociations": {
+    "*.pdf": "latex-workshop-pdf-hook"
+  },
+  "cmake.configureOnOpen": false,
+  "ruff.organizeImports": false,
+  "C_Cpp.clang_format_fallbackStyle": "Google",
+  "recall.extraCss": [
+    "{{yzhang.markdown-all-in-one}}/node_modules/katex/dist/katex.min.css"
+  ]
 }
