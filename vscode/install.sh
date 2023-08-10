@@ -33,12 +33,18 @@ extensions=(
   alefragnani.Bookmarks
   charliermarsh.ruff
   dqisme.sync-scroll
+  dracula-theme.theme-dracula
   foxundermoon.shell-format
   frenya.vscode-recall
   James-Yu.latex-workshop
   ms-python.isort
   ms-python.python
   ms-python.vscode-pylance
+  ms-toolsai.jupyter
+  ms-toolsai.jupyter-keymap
+  ms-toolsai.jupyter-renderers
+  ms-toolsai.vscode-jupyter-cell-tags
+  ms-toolsai.vscode-jupyter-slideshow
   ms-vscode.cmake-tools
   ms-vscode.cpptools
   ms-vscode.cpptools-extension-pack
@@ -49,6 +55,7 @@ extensions=(
   rust-lang.rust-analyzer
   stkb.rewrap
   tamasfe.even-better-toml
+  twxs.cmake
   vadimcn.vscode-lldb
   yzhang.markdown-all-in-one
 )
