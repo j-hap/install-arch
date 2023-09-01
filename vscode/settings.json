@@ -30,7 +30,7 @@
   "latex-workshop.view.pdf.viewer": "tab",
   "latex-workshop.latex.autoBuild.cleanAndRetry.enabled": false,
   "latex-workshop.latex.build.clearLog.everyRecipeStep.enabled": false,
-  "latex-workshop.latex.autoBuild.run": "onSave",
+  "latex-workshop.latex.autoBuild.run": "never",
   "powershell.codeFormatting.newLineAfterCloseBrace": false,
   "evenBetterToml.formatter.allowedBlankLines": 1,
   "evenBetterToml.formatter.alignEntries": true,
