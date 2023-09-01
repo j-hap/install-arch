@@ -47,7 +47,6 @@
     "editor.formatOnSave": false,
     "editor.tabSize": 4,
   },
-  "python.formatting.provider": "black",
   "isort.args": [ "--profile", "black" ],
   "jupyter.debugJustMyCode": false,
   // trailing whitespace has a purpose in md
