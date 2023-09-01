@@ -39,6 +39,7 @@ extensions=(
   James-Yu.latex-workshop
   ms-python.isort
   ms-python.python
+  ms-python.black-formatter
   ms-python.vscode-pylance
   ms-toolsai.jupyter
   ms-toolsai.jupyter-keymap
