@@ -68,10 +68,11 @@
     "editor.quickSuggestions": {
       "comments": "off",
       "strings": "off",
-      "other": "off",
+      "other": "off"
+    },
       "rewrap.wrappingColumn": 80,
-      "editor.wordWrap": "on"
-    }
+    "editor.wordWrap": "on",
+    "editor.formatOnSave": false
   },
   "workbench.editorAssociations": {
     "*.pdf": "latex-workshop-pdf-hook"
