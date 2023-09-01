@@ -4,6 +4,7 @@
   "update.enableWindowsBackgroundUpdates": true,
   "update.showReleaseNotes": false,
   "telemetry.telemetryLevel": "off",
+  "modernFortranFormatter.fprettifyArgs": "-i 2",
   "window.title": "${dirty}${activeEditorLong}${separator}${rootName}${separator}${appName}",
   "explorer.confirmDelete": false,
   "explorer.confirmDragAndDrop": false,
@@ -31,6 +32,9 @@
   "latex-workshop.latex.autoBuild.cleanAndRetry.enabled": false,
   "latex-workshop.latex.build.clearLog.everyRecipeStep.enabled": false,
   "latex-workshop.latex.autoBuild.run": "never",
+  "[matlab]": {
+    "editor.formatOnSave": false
+  },
   "powershell.codeFormatting.newLineAfterCloseBrace": false,
   "evenBetterToml.formatter.allowedBlankLines": 1,
   "evenBetterToml.formatter.alignEntries": true,
@@ -46,8 +50,14 @@
   "[python]": {
     "editor.formatOnSave": false,
     "editor.tabSize": 4,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
   },
   "isort.args": [ "--profile", "black" ],
+  "[lex]": {
+    "rewrap.wrappingColumn": 80
+  },
   "jupyter.debugJustMyCode": false,
   // trailing whitespace has a purpose in md
   "[markdown]": {
@@ -69,7 +79,7 @@
       "strings": "off",
       "other": "off"
     },
-      "rewrap.wrappingColumn": 80,
+    "rewrap.wrappingColumn": 80,
     "editor.wordWrap": "on",
     "editor.formatOnSave": false
   },
