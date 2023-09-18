@@ -374,8 +374,8 @@ install_nvidia_driver() {
     libva-utils     # support for hardware acceleration via VDPAU and NVDEC/NVENC (depending on model)
   )
   # hardware acceleration translation layers:
-  # libva-vdpau-driver   # translation layer that offers VA-API and utilizes the VDPAU (old, not used)
-  # libvdpau-va-gl       # translation layer that offers VDPAU and utilizes VAAPI backend (not needed for proprietary driver)
+  # libva-vdpau-driver   # translation layer that offers VA-API and utilizes the VDPAU backend (old, not used)
+  # libvdpau-va-gl       # translation layer that offers VDPAU and utilizes the VAAPI backend (not needed for proprietary driver)
   # nvidia-vaapi-driver  # translation layer that offers VA-API and utilizes the NVDEC backend (designed for firefox, decoding only, see https://github.com/elFarto/nvidia-vaapi-driver)
 
   # nvidia package blacklists nouveau by itself, so we don't need to
@@ -460,6 +460,8 @@ install_graphics_driver() {
   echo "Looking for AMD card..." >&2
   lspci -k 2>/dev/null | grep --after-context 2 --extended-regexp "(VGA|3D)" | grep --quiet "AMD\|ATI\|Radeon" && install_amd_driver
 
+  echo "Looking for Intel card..." >&2
+  lspci -k 2>/dev/null | grep --after-context 2 --extended-regexp "(VGA|3D)" | grep --quiet "AMD\|ATI\|Radeon" && arch-chroot "$SYSROOT" pacman -S --noconfirm --needed intel-media-driver
 }
 
 main() {
