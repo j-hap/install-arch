@@ -64,7 +64,7 @@
     "files.trimTrailingWhitespace": false,
     "editor.unicodeHighlight.ambiguousCharacters": false,
     "editor.unicodeHighlight.invisibleCharacters": false,
-    "editor.wordWrap": "on",
+    "editor.wordWrap": "off",
     // this just generates too many popups
     "editor.quickSuggestions": {
       "comments": "off",
