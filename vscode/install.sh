@@ -33,6 +33,7 @@ extensions=(
   alefragnani.Bookmarks
   charliermarsh.ruff
   dqisme.sync-scroll
+  daohong-emilio.yash
   dracula-theme.theme-dracula
   foxundermoon.shell-format
   frenya.vscode-recall
@@ -56,7 +57,6 @@ extensions=(
   rust-lang.rust-analyzer
   stkb.rewrap
   tamasfe.even-better-toml
-  twxs.cmake
   vadimcn.vscode-lldb
   yzhang.markdown-all-in-one
 )
