@@ -40,18 +40,19 @@ kernel_cmdline=(
 )
 
 mkinitcpio_hooks=(
-  base        #
-  systemd     #
-  plymouth    # boot splash and unlock screen
-  autodetect  #
-  modconf     #
-  kms         # must not be included when using NVIDIA driver
-  keyboard    # so drive encryption password can be entered
-  sd-vconsole # only needed when encryption pw shall be entered in a different keymap than us
-  block       #
-  sd-encrypt  # for decryption
-  filesystems #
-  fsck        #
+  base          #
+  systemd       #
+  systemd-ukify # contains neccessary kernel-install hooks for uki generation, see https://bugs.archlinux.org/task/80240#comment223638
+  plymouth      # boot splash and unlock screen
+  autodetect    #
+  modconf       #
+  kms           # must not be included when using NVIDIA driver
+  keyboard      # so drive encryption password can be entered
+  sd-vconsole   # only needed when encryption pw shall be entered in a different keymap than us
+  block         #
+  sd-encrypt    # for decryption
+  filesystems   #
+  fsck          #
 )
 
 services=(
@@ -298,6 +299,7 @@ setup_bootloader() {
   bootctl --root "$SYSROOT" install
   # configures the bootloader, must not include options, because that overrides the cmdline in the uki
   loader_options=(
+    "default *lts*"
     "timeout 1"
     "console-mode auto"
     "editor no"
@@ -339,6 +341,8 @@ setup_initrd_generator() {
 
   # configures unified kernel image format
   echo "layout=uki" >"$SYSROOT/etc/kernel/install.conf"
+  # fix for https://gitlab.archlinux.org/archlinux/packaging/packages/systemd/-/issues/19
+  echo "uki_generator=mkinitcpio" >>"$SYSROOT/etc/kernel/install.conf"
 
   # need to deactivate the pacman hooks for mkinitcpio, because it shall call kernel-install instead
   ln -sf /dev/null "$SYSROOT/usr/share/libalpm/hooks/60-mkinitcpio-remove.hook"
