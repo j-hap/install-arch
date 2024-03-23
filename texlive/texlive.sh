@@ -1,15 +1,17 @@
-#! /bin/sh
+#! /usr/bin/env bash
 # the hard way
-# URL=http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
-# filename=$(basename $URL)
-# mkdir --parents ~/texlive-installation
-# cp --force ./texlive.profile ~/texlive-installation
-# pushd ~/texlive-installation
-# wget --quiet --output-document=$filename --no-clobber -- $URL
-# tar --extract --gzip --strip-components=1 --file $filename
-# sudo perl ./install-tl --profile ./texlive.profile --no-interaction
-# popd
-# rm -r ~/texlive-installation
+URL=http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
+filename=$(basename $URL)
+mkdir --parents ~/texlive-installation
+cp --force ./texlive.profile ~/texlive-installation
+pushd ~/texlive-installation
+wget --quiet --output-document=$filename --no-clobber -- $URL
+tar --extract --gzip --strip-components=1 --file $filename
+sudo perl ./install-tl --profile ./texlive.profile --no-interaction
+popd
+rm -r ~/texlive-installation
+
+sudo pacman --sync --noconfirm --needed libxcrypt-compat # needed for biber
 
 latexmk_packages=(
   perl-File-Copy
@@ -30,9 +32,9 @@ if command -v dnf &>/dev/null; then
 elif command -v apt >/dev/null 2>&1; then
   sudo apt --assume-yes install ${latexmk_packages[@]} ${latexindent_packages[@]}
 elif command -v pacman >/dev/null 2>&1; then
-  # if one package is not found, packman cancels, so in a loopp
+  # if one package is not found, pacman cancels, so in a loop
   for package in ${latexmk_packages[@]} ${latexindent_packages[@]}; do
     # need lower case conversion
-    sudo pacman -S --noconfirm "${package,,}"
+    sudo pacman --sync --noconfirm --needed "${package,,}"
   done
 fi
