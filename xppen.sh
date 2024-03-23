@@ -87,6 +87,7 @@ map_tablet_to_screen() {
 
 # creates a config file to that the xp pen tablet can be used with xsetwacom
 # see https://forums.linuxmint.com/viewtopic.php?t=390993
+# and https://wiki.archlinux.org/title/Graphics_tablet
 if [ ! -f /etc/X11/xorg.conf.d/10-xppen.conf ]; then
   sudo dd of="/etc/X11/xorg.conf.d/10-xppen.conf" <<EOF
 Section "InputClass"
