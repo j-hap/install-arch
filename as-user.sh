@@ -56,29 +56,52 @@ app_searcher_with_super_l() {
   xfconf-query --channel xfce4-keyboard-shortcuts --property /commands/custom/Super_L --create --type string --set "xfce4-appfinder"
 }
 
-install_rust() {
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-  source "$HOME/.cargo/env"
-}
-
 install_vcpkg() {
-  git clone https://github.com/Microsoft/vcpkg.git $HOME/.vcpkg
-  cat >$HOME/.vcpkg/env <<EOF
+  install_dir="$HOME/.vcpkg"
+  if [ -d ${install_dir}/.git ]; then
+    pushd ${install_dir} >/dev/null
+    git pull
+  else
+    git clone https://github.com/Microsoft/vcpkg.git ${install_dir}
+    pushd ${install_dir} >/dev/null
+  fi
+  ./bootstrap-vcpkg.sh -disableMetrics
+  popd >/dev/null
+  cat >${install_dir}/env <<EOF
 #!/bin/sh
 # vcpkg shell setup
-# affix colons on either side of $PATH to simplify matching
-case ":${PATH}:" in
-    *:"$HOME/.vcpkg":*)
+# affix colons on either side of \$PATH to simplify matching
+case ":\${PATH}:" in
+    *:"\$HOME/.vcpkg":*)
         ;;
     *)
-        # Prepending path in case a system-installed rustc needs to be overridden
-        export PATH="$PATH:$HOME/.vcpkg"
+        export PATH="\$PATH:\$HOME/.vcpkg"
         ;;
 esac
 EOF
-  line='. $HOME/.vcpkg/env'
+  line='. "$HOME/.vcpkg/env"'
   for f in $HOME/.bash_profile $HOME/.profile $HOME/.zshenv $HOME/.bashrc; do
-    sed -i "/$line/d" $f
+    sed -i "\|$line|d" $f
+    echo $line >>$f
+  done
+}
+
+integrate_cargo() {
+  cat >$HOME/.cargo/env <<EOF
+#!/bin/sh
+# cargo binaries shell setup
+# affix colons on either side of \$PATH to simplify matching
+case ":\${PATH}:" in
+    *:"\$HOME/.cargo":*)
+        ;;
+    *)
+        export PATH="\$PATH:\$HOME/.cargo/bin"
+        ;;
+esac
+EOF
+  line='. "$HOME/.cargo/env"'
+  for f in $HOME/.bash_profile $HOME/.profile $HOME/.zshenv $HOME/.bashrc; do
+    sed -i "\|$line|d" $f
     echo $line >>$f
   done
 }
@@ -89,9 +112,7 @@ main() {
   $here/$desktop_environment/all.sh
   texlive/texlive.sh
   oh_my_zsh
-  install_rust
   install_vcpkg
-  cargo install paru
 }
 
 if ([ -n "${BASH_SOURCE}" ] && [ "$0" = "${BASH_SOURCE}" ]) || ([ -n "${ZSH_EVAL_CONTEXT}" ] && [[ ! "${ZSH_EVAL_CONTEXT}" =~ ':file$' ]]); then
