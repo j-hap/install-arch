@@ -325,12 +325,12 @@ install_aur() {
   local url=$1
   temp_dir=$(mktemp --directory)
   chmod a+rwx $temp_dir
-  pacman -S --noconfirm --needed git fakeroot
+  pacman --sync --noconfirm --needed git fakeroot
   git clone $url $temp_dir
   pushd $temp_dir
   sudo -u nobody makepkg .
   cp *.pkg.tar.zst "$SYSROOT"
-  arch-chroot "$SYSROOT" pacman -U --noconfirm *.pkg.tar.zst
+  arch-chroot "$SYSROOT" pacman --upgrade --noconfirm *.pkg.tar.zst
   rm $SYSROOT/*.pkg.tar.zst
   popd
   # rm -r $temp_dir
